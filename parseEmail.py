@@ -3,11 +3,21 @@ import urllib2 # Body analyze for href and title
 import email.parser
 import sys
 import re
+import os
 #
+file = sys.argv[1]
+#path_file = os.path.split(file)[0]
 receivedFrom = {}
 tmpIp = ''
 #
-with open(sys.argv[1], 'r') as myMail:
+if os.path.split(file)[0] == "":
+    file = os.getcwd() + "/" + file
+
+if not os.path.exists(file):
+    print "Argument file does not exist! \nExiting ...!"
+    exit()
+#
+with open(file, 'r') as myMail:
     msg = email.parser.Parser().parse(myMail, True)
 
 for k,v in msg.items():
@@ -40,7 +50,8 @@ print
 print "====================="
 print "Message Body analysis"
 print "====================="
-msg_html = urllib2.urlopen("file:///home/matrixx/hubic/scripts/confirmation.eml")
+msg_html = urllib2.urlopen("file://" + file)
+print msg_html
 soup = BeautifulSoup(msg_html)
 for link in soup.findAll('a'):
     if link.string <> None:

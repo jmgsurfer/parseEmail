@@ -1,4 +1,4 @@
-from BeautifulSoup import BeautifulSoup # pip install beautifulsoup
+from bs4 import BeautifulSoup # pip install beautifulsoup4
 import urllib2 # Body analyze for href and title
 import email.parser
 import sys
@@ -9,6 +9,8 @@ file = sys.argv[1]
 #path_file = os.path.split(file)[0]
 receivedFrom = {}
 tmpIp = ''
+#
+os.system('clear||cls')
 #
 if os.path.split(file)[0] == "":
     file = os.getcwd() + "/" + file
@@ -45,15 +47,16 @@ print "==="
 print "1st Received:", "from", receivedFrom.get('Received'), "IP:", receivedFrom.get('IP')
 print "by:", receivedFrom.get('By')
 print "on:", receivedFrom.get('Date')
-print  
 #
-print "====================="
+print "\n====================="
 print "Message Body analysis"
 print "====================="
 msg_html = urllib2.urlopen("file://" + file)
-print msg_html
-soup = BeautifulSoup(msg_html)
-for link in soup.findAll('a'):
+soup = BeautifulSoup(msg_html,'lxml')
+
+print "Page link retrieval:"
+print "--------------------"
+for link in soup.find_all('a'):
     if link.string <> None:
         print "<",link.string,">"
         print "   Initial Link:", link.get('href')
@@ -61,6 +64,8 @@ for link in soup.findAll('a'):
         #req =urllib2.Request(link.get('href'))
         #res =urllib2.urlopen(req)
         #print "Final Link:", res.geturl()
-
-
-
+print "\nImage link retrieval:"
+print "----------------------"
+for link2 in soup.find_all('img'):
+    if link2.get('src') <> "":
+        print link2.get('src')

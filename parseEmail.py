@@ -29,11 +29,10 @@ for k,v in msg.items():
         tmpIp = ''
     if k == 'Received':
         temp = v.split()
-        idx_by = temp.index('by')
         receivedFrom["Received"] = temp[1]
         receivedFrom["IP"] = tmpIp
         receivedFrom["Date"] = v.split(';')[1]
-        receivedFrom["By"] = temp[idx_by + 1]
+        receivedFrom["By"] = v.split('\n')[1].split()[1]
 print "======================="
 print "Message Header analysis"
 print "======================="

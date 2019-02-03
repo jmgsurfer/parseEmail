@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup # pip install beautifulsoup4
+import whois # pip install python-whois
 import urllib2 # Body analyze for href and title
 import email.parser
 import sys

@@ -2,5 +2,7 @@
 Scripts to parse header/body from spam/phishing email
 
 ## ToDo
-- Look for a href, src (check urllib2.urlopen method)
+- implement python-whois and tldextract module
+- get doain name from urls collected
+- check creation-date 
 

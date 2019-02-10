@@ -10,6 +10,18 @@ file = sys.argv[1]
 #path_file = os.path.split(file)[0]
 receivedFrom = {}
 tmpIp = ''
+domainList = []
+#
+def domain(url):
+    d = re.search('(www\.|\:\/\/)+([\w\-\.]+)', url)
+    return d.group(len(d.groups()))
+#
+def isPresent(elt, lst):
+    return elt in lst
+
+def appendToListe(element, liste):
+    liste.append(element)
+    return
 #
 os.system('clear||cls')
 #
@@ -60,6 +72,9 @@ for link in soup.find_all('a'):
     if link.string <> None:
         print "<",link.string,">"
         print "   Initial Link:", link.get('href')
+        if not isPresent(domain(link.get('href')),domainList):
+            appendToListe(domain(link.get('href')),domainList)
+
         # Below to be run with Tor
         #req =urllib2.Request(link.get('href'))
         #res =urllib2.urlopen(req)
@@ -69,3 +84,7 @@ print "----------------------"
 for link2 in soup.find_all('img'):
     if link2.get('src') <> "":
         print link2.get('src')
+        if not isPresent(domain(link2.get('src')),domainList):        
+            appendToListe(domain(link2.get('src')),domainList)
+print domainList
+

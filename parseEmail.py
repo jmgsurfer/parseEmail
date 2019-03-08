@@ -5,6 +5,7 @@ import email.parser
 import sys
 import re
 import os
+import whois
 #
 file = sys.argv[1]
 #path_file = os.path.split(file)[0]
@@ -86,5 +87,15 @@ for link2 in soup.find_all('img'):
         print link2.get('src')
         if not isPresent(domain(link2.get('src')),domainList):        
             appendToListe(domain(link2.get('src')),domainList)
-print domainList
+#print domainList
+print "\nDomain Whois Information:"
+print "--------------------------"
+for d in domainList:
+    try:
+        w = whois.whois(d)
+        print d, "-> creation date: ", str(w.creation_date)
+        print "--"
+    except:
+        print d, "was deleted. No more Whois information available."
+        
 

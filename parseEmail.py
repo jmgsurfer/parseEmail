@@ -12,6 +12,13 @@ file = sys.argv[1]
 receivedFrom = {}
 tmpIp = ''
 domainList = []
+enc = 'none'
+#
+def is_windows():
+    if os.name == 'nt':
+        return True
+    else:
+        return False
 #
 def domain(url):
     d = re.search('(www\.|\:\/\/)+([\w\-\.]+)', url)
@@ -27,7 +34,15 @@ def appendToListe(element, liste):
 os.system('clear||cls')
 #
 if os.path.split(file)[0] == "":
-    file = os.getcwd() + "/" + file
+    if is_windows():
+        file = os.getcwd() + "\\" + file
+        url_file = "/" + file.replace("\\","/")
+        print "window: ", file
+        print url_file
+    else:    
+        file = os.getcwd() + "/" + file
+        url_file = file
+        print file
 
 if not os.path.exists(file):
     print "Argument file does not exist! \nExiting ...!"
@@ -47,6 +62,8 @@ for k,v in msg.items():
         receivedFrom["IP"] = tmpIp
         receivedFrom["Date"] = v.split(';')[1]
         receivedFrom["By"] = v.split('\n')[1].split()[1]
+    if k == 'Content-Transfer-Encoding':
+        enc = v
 print "======================="
 print "Message Header analysis"
 print "======================="
@@ -60,12 +77,17 @@ print "==="
 print "1st Received:", "from", receivedFrom.get('Received'), "IP:", receivedFrom.get('IP')
 print "by:", receivedFrom.get('By')
 print "on:", receivedFrom.get('Date')
+print "==="
+print "Content-Transfer-encoding:", enc
 #
 print "\n====================="
 print "Message Body analysis"
 print "====================="
-msg_html = urllib2.urlopen("file://" + file)
-soup = BeautifulSoup(msg_html,'lxml')
+msg_html = urllib2.urlopen("file://" + url_file)
+if is_windows():
+    soup = BeautifulSoup(msg_html, features="html.parser")
+else:
+    soup = BeautifulSoup(msg_html, 'lxml')
 
 print "Page link retrieval:"
 print "--------------------"

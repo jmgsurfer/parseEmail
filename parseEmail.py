@@ -5,7 +5,6 @@ import email.parser
 import sys
 import re
 import os
-import whois
 #
 file = sys.argv[1]
 #path_file = os.path.split(file)[0]

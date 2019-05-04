@@ -30,6 +30,9 @@ def appendToListe(element, liste):
     liste.append(element)
     return
 #
+def bodyDecode64(beml):
+    return
+#
 os.system('clear||cls')
 #
 if os.path.split(file)[0] == "":

@@ -5,6 +5,7 @@ import email.parser
 import sys
 import re
 import os
+import base64
 #
 file = sys.argv[1]
 #path_file = os.path.split(file)[0]
@@ -51,7 +52,9 @@ if not os.path.exists(file):
     exit()
 #
 with open(file, 'r') as myMail:
-    msg = email.parser.Parser().parse(myMail, True)
+#    msg = email.parser.Parser().parse(myMail, True) # use to parse myMail email file for header only (True)
+    msg = email.parser.Parser().parse(myMail) # use to parse myMail email file for header only (True)
+msg_html = msg.get_payload()
 
 for k,v in msg.items():
     try:
@@ -66,6 +69,8 @@ for k,v in msg.items():
         receivedFrom["By"] = v.split('\n')[1].split()[1]
     if k == 'Content-Transfer-Encoding':
         enc = v
+        if enc == "base64":
+            msg_html = base64.decodestring(msg_html)
 print "======================="
 print "Message Header analysis"
 print "======================="
@@ -85,7 +90,7 @@ print "Content-Transfer-encoding:", enc
 print "\n====================="
 print "Message Body analysis"
 print "====================="
-msg_html = urllib2.urlopen("file://" + url_file)
+# msg_html = urllib2.urlopen("file://" + url_file)
 if is_windows():
     soup = BeautifulSoup(msg_html, features="html.parser")
 else:

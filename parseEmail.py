@@ -62,11 +62,14 @@ for k,v in msg.items():
     except:
         tmpIp = ''
     if k == 'Received':
-        temp = v.split()
-        receivedFrom["Received"] = temp[1]
-        receivedFrom["IP"] = tmpIp
-        receivedFrom["Date"] = v.split(';')[1]
-        receivedFrom["By"] = v.split('\n')[1].split()[1]
+        try:
+            temp = v.split()
+            receivedFrom["Received"] = temp[1]
+            receivedFrom["IP"] = tmpIp
+            receivedFrom["Date"] = v.split(';')[1]
+            receivedFrom["By"] = v.split('\n')[1].split()[1]
+        except:
+           None
     if k == 'Content-Transfer-Encoding':
         enc = v
         if enc == "base64":

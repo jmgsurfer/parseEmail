@@ -6,7 +6,8 @@ import sys
 import re
 import os
 import base64
-#
+import quopri
+# manage argument passed in command line: python parsEmail.py emailFileToBeProcessed.eml
 file = sys.argv[1]
 #path_file = os.path.split(file)[0]
 receivedFrom = {}
@@ -26,7 +27,7 @@ def domain(url):
 #
 def isPresent(elt, lst):
     return elt in lst
-
+#
 def appendToListe(element, liste):
     liste.append(element)
     return
@@ -52,9 +53,9 @@ if not os.path.exists(file):
     exit()
 #
 with open(file, 'r') as myMail:
-#    msg = email.parser.Parser().parse(myMail, True) # use to parse myMail email file for header only (True)
     msg = email.parser.Parser().parse(myMail) # use to parse myMail email file for header only (True)
-msg_html = msg.get_payload()
+
+msg_html = msg.get_payload() # get email body only
 
 for k,v in msg.items():
     try:
@@ -74,6 +75,9 @@ for k,v in msg.items():
         enc = v
         if enc == "base64":
             msg_html = base64.decodestring(msg_html)
+        if enc == "quoted-printable":
+            msg_html = quopri.decodestring(msg_html)
+#
 print "======================="
 print "Message Header analysis"
 print "======================="
@@ -112,6 +116,7 @@ for link in soup.find_all('a'):
         #req =urllib2.Request(link.get('href'))
         #res =urllib2.urlopen(req)
         #print "Final Link:", res.geturl()
+
 print "\nImage link retrieval:"
 print "----------------------"
 for link2 in soup.find_all('img'):
@@ -119,7 +124,7 @@ for link2 in soup.find_all('img'):
         print link2.get('src')
         if not isPresent(domain(link2.get('src')),domainList):        
             appendToListe(domain(link2.get('src')),domainList)
-#print domainList
+
 print "\nDomain Whois Information:"
 print "--------------------------"
 for d in domainList:
@@ -130,4 +135,3 @@ for d in domainList:
     except:
         print d, "was deleted. No more Whois information available."
         
-

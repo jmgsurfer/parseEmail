@@ -9,16 +9,16 @@ import re # used to catch IP address
 file = sys.argv[1]
 #path_file = os.path.split(file)[0]
 #
-receivedFrom = {}
+receivedFrom = {} # dictionary for received header split contents
 tmpIp = ''
 #
-def extReceived(received):
+def extReceived(received): # used to split "received" header contents
     receive = {}
     receive = received.split()
     return receive 
 
 with open(file, 'r') as myMail:
-    msg = email.parser.Parser().parse(myMail, True)
+    msg = email.parser.Parser().parse(myMail, True) # parse email file (myMail)  to retrieve only headers: True
 
 taille_msg = len(msg)
 
@@ -34,7 +34,9 @@ for k,v in msg.items():
         receivedFrom["IP"] = tmpIp
         receivedFrom["Date"] = v.split(';')[1]
         receivedFrom["By"] = temp[idx_by + 1]
-
+#
+# Display Report
+#
 print("===") 
 print("Message-ID:", msg.get('Message-ID'))
 print("Reply-To:", msg.get('Reply-To'))

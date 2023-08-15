@@ -1,18 +1,25 @@
-from bs4 import BeautifulSoup # pip install beautifulsoup4
-import whois # pip install python-whois
-import email.parser
-import sys
-import re
+from bs4 import BeautifulSoup # used to scrape html part of email
+import whois # used to retrieve info from url found in email
+import email.parser # used to parse headers, body from email
+import sys # used to get argument (email file)
+import re # used to catch IP address
 import os
 import base64
 import quopri
+#
+# To ensure all necessary modules are installed: pip install -r requirements.txt
+#
 # manage argument passed in command line: python parsEmail.py emailFileToBeProcessed.eml
-file = sys.argv[1]
+try:
+    file = sys.argv[1]
+except:
+    print("No argument (file name) specified. \nExiting ...!")
+    exit()
 #path_file = os.path.split(file)[0]
-receivedFrom = {}
+receivedFrom = {} # dictionary for received header split contents
 tmpIp = ''
 domainList = []
-enc = 'none'
+enc = 'none' 
 #
 def is_windows():
     if os.name == 'nt':
@@ -34,23 +41,23 @@ def appendToListe(element, liste):
 def bodyDecode64(beml):
     return
 #
-os.system('clear||cls')
-#
-if os.path.split(file)[0] == "":
-    if is_windows():
-        file = os.getcwd() + "\\" + file
-        url_file = "/" + file.replace("\\","/")
-        print("window: ", file)
-        print(url_file)
-    else:    
-        file = os.getcwd() + "/" + file
-        url_file = file
-        print(file)
+os.system('clear||cls') # start by clear the terminal
+# Below will be used when path of file specified in argument is not in current working directory.
+#if os.path.split(file)[0] == "":
+#    if is_windows():
+#        file = os.getcwd() + "\\" + file
+#        url_file = "/" + file.replace("\\","/")
+#        print("window: ", file)
+#        print(url_file)
+#    else:    
+#        file = os.getcwd() + "/" + file
+#        url_file = file
+#        print(file)
+#if not os.path.exists(file):
+#    print("Argument file does not exist! \nExiting ...!")
+#    exit()
+# Above will be used when path of file specified in argument is not in current working directory.
 
-if not os.path.exists(file):
-    print("Argument file does not exist! \nExiting ...!")
-    exit()
-#
 with open(file, 'r') as myMail:
     msg = email.parser.Parser().parse(myMail) # use to parse myMail email file for header only (True)
 

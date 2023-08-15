@@ -1,9 +1,9 @@
-from bs4 import BeautifulSoup # pip install beautifulsoup
-import email.parser
-import sys
-import collections
-import re
+from bs4 import BeautifulSoup # used to scrape html part of email
+import email.parser # used to parse headers, body from email
+import sys # used to get argument (email file)
+import re # used to catch IP address
 #
+# To ensure all necessary modules are installed: pip install -r requirements.txt
 #
 # manage argument passed in command line: python parsEmail.py emailFileToBeProcessed.eml
 file = sys.argv[1]
@@ -56,10 +56,7 @@ for link in soup.findAll('a'):
     if link.string != None:
         print("<",link.string,">")
         print("Initial Link:", link.get('href'))
-        # Below to be run with Tor
-        #req =urllib2.Request(link.get('href'))
-        #res =urllib2.urlopen(req)
-        #print "Final Link:", res.geturl()
+
 
 
 
